@@ -15,7 +15,7 @@ from bqskit.qis.permutation import PermutationMatrix
 from bqskit.qis.unitary.differentiable import DifferentiableUnitary
 from bqskit.qis.unitary.unitary import RealVector
 from bqskit.qis.unitary.unitarymatrix import UnitaryMatrix
-from bqskit.utils.math import softmax
+from bqskit.utils.math_utils import softmax
 
 
 class VariableLocationGate(ComposedGate):

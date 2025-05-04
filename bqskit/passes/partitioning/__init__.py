@@ -10,6 +10,7 @@ from bqskit.passes.partitioning.greedy import GreedyPartitioner
 from bqskit.passes.partitioning.quick import QuickPartitioner
 from bqskit.passes.partitioning.scan import ScanPartitioner
 from bqskit.passes.partitioning.single import GroupSingleQuditGatePass
+from .hypergraphpartition import EnhancedHypergraphPartitionPass
 
 __all__ = [
     'ClusteringPartitioner',
@@ -17,4 +18,6 @@ __all__ = [
     'ScanPartitioner',
     'QuickPartitioner',
     'GroupSingleQuditGatePass',
+    #
+    'EnhancedHypergraphPartitionPass'
 ]

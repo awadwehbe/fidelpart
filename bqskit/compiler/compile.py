@@ -891,6 +891,7 @@ def get_instantiate_options(optimization_level: int) -> dict[str, Any]:
             f' Got {optimization_level}.',
         )
 
+#from bqskit.passes.partitioning.hypergraphpartition import HypergraphPartitionPass
 
 def build_partitioning_workflow(
     inner_workflow: WorkflowLike,
@@ -942,6 +943,7 @@ def build_partitioning_workflow(
         )
 
     pass_list = [QuickPartitioner(block_size), ExtendBlockSizePass()]
+    #pass_list = [HypergraphPartitionPass(block_size=block_size), ExtendBlockSizePass()]
 
     if error_sim_size is None:
         pass_list += [

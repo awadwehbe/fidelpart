@@ -4,7 +4,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from bqskit.passes.control.predicate import PassPredicate
-from bqskit.utils.math import diagonal_distance
+from bqskit.utils.math_utils import diagonal_distance
 
 if TYPE_CHECKING:
     from bqskit.compiler.passdata import PassData

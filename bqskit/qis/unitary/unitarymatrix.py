@@ -536,6 +536,116 @@ class UnitaryMatrix(Unitary, StateVectorMap, NDArrayOperatorsMixin):
     def __hash__(self) -> int:
         """Return the hash of the unitary."""
         return hash((self._utry[0][0], self._utry[-1][-1], self.shape))
+    
+    def partial_trace(rho: np.ndarray, mask: list[bool]) -> np.ndarray:
+        """
+        Compute the partial trace of a density matrix.
+    
+        Args:
+            rho (np.ndarray): The density matrix of the full system.
+            mask (list[bool]): A mask indicating which qubits to keep.
+                          Example: [True, False, True] means keep qubits 0 and 2.
+    
+        Returns:
+            np.ndarray: The reduced density matrix.
+        """
+        num_qubits = int(np.log2(rho.shape[0]))  # Number of qubits in the full system
+        """
+        The number of qubits is determined from the size of the density matrix ρ.
+        For an n-qubit system, ρ is a 2^n × 2^n matrix.
+        """
+        keep_indices = [i for i, val in enumerate(mask) if val]  # Indices of qubits to keep
+        trace_indices = [i for i, val in enumerate(mask) if not val]  # Indices of qubits to trace out
+
+        # Reshape the density matrix into a tensor
+        shape = [2] * (2 * num_qubits)
+        rho_tensor = rho.reshape(shape)
+        """
+        The density matrix ρ is reshaped into a tensor with shape [2,2,…,2] (one dimension for each qubit in the system,
+        repeated twice for rows and columns).
+        """
+
+        # Trace out the qubits not in the mask
+        # for i in sorted(trace_indices, reverse=True):
+        #     rho_tensor = np.trace(rho_tensor, axis1=i, axis2=num_qubits + i)
+        current_num_qubits = num_qubits
+        for qubit_idx in sorted(trace_indices, reverse=True):
+            # In the tensor, each qubit has two axes: rows and columns
+            # For qubit i: rows at axis 2*i, cols at axis 2*i + 1
+            axis1 = 2 * qubit_idx  # Rows of the qubit to trace
+            axis2 = 2 * qubit_idx + 1  # Columns of the qubit to trace
+            rho_tensor = np.trace(rho_tensor, axis1=axis1, axis2=axis2)
+            current_num_qubits -= 1  # One qubit traced out, reducing the system size
+            
+        """
+        For each qubit to trace out, the partial trace is computed by summing over the corresponding indices.
+
+        The np.trace function is used to perform the partial trace along the specified axes.
+        """
+
+        # Reshape back into a matrix
+        new_shape = 2 ** len(keep_indices)
+        reduced_dm = rho_tensor.reshape((new_shape, new_shape))
+
+        return reduced_dm
+
+    
+    def get_reduced_density_matrix(utry: UnitaryMatrix, qubits: list[int]) -> np.ndarray:
+        
+        """
+        Compute the reduced density matrix for a subset of qubits.
+    
+        Args:
+            utry (UnitaryMatrix): The unitary matrix of the system.
+            qubits (list[int]): The qubits to include in the reduced density matrix.
+    
+        Returns:
+            np.ndarray: The reduced density matrix.
+        """
+        # Step 1: Compute the full density matrix
+        #num_qubits = utry.num_qudits
+        # Ensure we have a UnitaryMatrix instance
+        if not isinstance(utry, UnitaryMatrix):
+            utry = utry.get_unitary()  # Convert to UnitaryMatrix using Unitary interface
+
+        # Get dimension
+        try:
+            dim_value = int(utry.dim)  # Try the property first
+        except (TypeError, AttributeError):
+            dim_value = len(utry)  # Fallback to __len__
+
+
+        num_qubits = int(np.log2(dim_value))  # Compute number of qubits
+
+        initial_state = np.zeros((2**num_qubits, 1))
+        initial_state[0, 0] = 1  # |0⟩ state
+        final_state = utry @ initial_state
+        rho = final_state @ final_state.conj().T  # Density matrix
+        """
+        num_qubits: The number of qubits in the system.
+
+        initial_state: The initial state of the system, assumed to be ∣0⟩ (all qubits in the ground state).
+
+        final_state: The state of the system after applying the unitary matrix U.
+
+        rho: The density matrix of the system, computed as ρ=∣ψ⟩⟨ψ∣, where ∣ψ⟩=U∣0⟩.
+        """
+
+        # Step 2: Trace out the other qubits
+        # Convert qubit indices to a mask for tracing
+        mask = [i in qubits for i in range(num_qubits)]
+        """
+        mask: A list of booleans indicating which qubits to keep (True) and which to trace out (False).
+
+        Example: For qubits = [0, 1] and num_qubits = 3, the mask is [True, True, False].
+
+        partial_trace: Calls the partial_trace function to compute the reduced density matrix.
+        """
+        reduced_dm = UnitaryMatrix.partial_trace(rho, mask)
+
+        return reduced_dm
+    
+ 
 
 
 UnitaryLike = Union[
@@ -548,3 +658,19 @@ UnitaryLike = Union[
     npt.NDArray[np.float32],
     Sequence[Sequence[Union[int, float, complex]]],
 ]
+
+"""
+so we use this method to check separabelity if yes so it not entangled.
+so we compute rho in which it the full density matrix : |psi>*<psi> then we get the reduced density matrix in which we ignore 
+cubits that we are not working with and we apply the Peres-Horodecki criterion (partial transpose and eigenvalues) on  
+reduced density matrix to check separability.
+
+The Peres-Horodecki criterion states that a bipartite state ρAB
+is separable if its partial transpose has no negative eigenvalues.
+
+The _is_separable method checks if a reduced density matrix is separable using the Peres-Horodecki criterion.
+
+It computes the partial transpose of the reduced density matrix and checks its eigenvalues.
+
+If all eigenvalues are non-negative, the state is separable; otherwise, it is entangled.
+"""

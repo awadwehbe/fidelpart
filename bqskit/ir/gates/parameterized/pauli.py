@@ -14,10 +14,10 @@ from bqskit.qis.unitary.differentiable import DifferentiableUnitary
 from bqskit.qis.unitary.unitary import RealVector
 from bqskit.qis.unitary.unitarymatrix import UnitaryMatrix
 from bqskit.utils.docs import building_docs
-from bqskit.utils.math import dexpmv
-from bqskit.utils.math import dot_product
-from bqskit.utils.math import pauli_expansion
-from bqskit.utils.math import unitary_log_no_i
+from bqskit.utils.math_utils import dexpmv
+from bqskit.utils.math_utils import dot_product
+from bqskit.utils.math_utils import pauli_expansion
+from bqskit.utils.math_utils import unitary_log_no_i
 
 
 class PauliGate(QubitGate, DifferentiableUnitary, GeneralGate):

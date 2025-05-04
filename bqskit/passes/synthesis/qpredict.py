@@ -17,8 +17,8 @@ from bqskit.passes.synthesis.synthesis import SynthesisPass
 from bqskit.qis.state.state import StateVector
 from bqskit.qis.state.system import StateSystem
 from bqskit.qis.unitary.unitarymatrix import UnitaryMatrix
-from bqskit.utils.math import pauli_expansion
-from bqskit.utils.math import unitary_log_no_i
+from bqskit.utils.math_utils import pauli_expansion
+from bqskit.utils.math_utils import unitary_log_no_i
 from bqskit.utils.typing import is_integer
 from bqskit.utils.typing import is_real_number
 

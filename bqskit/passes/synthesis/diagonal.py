@@ -13,8 +13,8 @@ from bqskit.passes.synthesis.synthesis import SynthesisPass
 from bqskit.qis.state.state import StateVector
 from bqskit.qis.state.system import StateSystem
 from bqskit.qis.unitary import UnitaryMatrix
-from bqskit.utils.math import pauliz_expansion
-from bqskit.utils.math import unitary_log_no_i
+from bqskit.utils.math_utils import pauliz_expansion
+from bqskit.utils.math_utils import unitary_log_no_i
 
 
 _logger = logging.getLogger(__name__)
