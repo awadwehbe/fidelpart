@@ -73,3 +73,98 @@ its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the
 Software to reproduce, distribute copies to the public, prepare derivative
 works, and perform publicly and display publicly, and to permit others to
 do so.
+
+
+"""
+
+
+"""
+
+## Installation and Setup
+
+To use BQSKIT with its dependencies, including `pymetis` for graph partitioning and `kahypar` for hypergraph partitioning, follow these steps to set up the environment. These instructions assume you have a compatible system (Linux, macOS, or Windows with WSL).
+
+### Prerequisites
+- **Miniconda**: Install Miniconda to manage the Python environment. Download it from [https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html) and follow the installation instructions for your platform.
+- **Git**: Required to clone or work with the repository (if applicable).
+
+### Setting Up the Environment
+The recommended way to install dependencies is using Conda with the provided `environment.yml` file, which ensures compatibility with `pymetis` (installed via Conda-Forge) and `kahypar` (installed via PyPI).
+
+#### Step 1: Clone or Extract the Project
+If you received this as a Git repository:
+```bash
+git clone <repository-url>
+cd bqskit
+
+#### Step 2: Create the Environment
+#Use the environment.yml file to recreate the exact environment:
+conda env create -f environment.yml
+
+"""
+This sets up a Conda environment named pymetis_env with Python 3.11 and all required packages.
+
+The contents of environment.yml are:
+"""
+name: pymetis_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - numpy>=1.26.0
+  - scipy>=1.12.0
+  - lark>=1.2.2
+  - pymetis>=2022.1
+  - pip
+  - pip:
+    - kahypar>=1.0
+    - bqskitrs>=0.4.1
+    - dill>=0.3.9
+    - typing_extensions>=4.12.2
+
+### Step 3: Activate the Environment
+#Activate the environment to use it:
+conda activate pymetis_env
+
+### Step 4: Install BQSKIT
+# Install the local bqskit package in editable mode:
+pip install -e .
+
+###Step 5: Verify Installation
+#Test that everything is set up:
+
+python -c "import bqskit, pymetis, kahypar; print('BQSKIT and dependencies installed successfully')"
+
+"""
+Alternative Setup with pip
+If you prefer not to use Conda or encounter issues:
+
+Create a virtual environment
+
+"""
+python -m venv venv
+source venv/bin/activate  # Linux/WSL/Mac
+venv\Scripts\activate     # Windows CMD
+
+#Install dependencies from requirements.txt:
+pip install -r requirements.txt
+
+#Install BQSKIT:Install BQSKIT:
+pip install .
+
+#Note: pymetis may require a compatible Python version (e.g., <=3.11) and a C++ compiler (e.g., g++). On Ubuntu, install build tools with:
+sudo apt update && sudo apt install -y build-essential g++ cmake
+
+"""
+
+This method might not match the exact Conda-Forge pymetis version (2023.1.1) used in development.
+
+Dependencies
+Core BQSKIT Dependencies: numpy, scipy, lark, bqskitrs, dill, typing_extensions.
+Partitioning Tools:
+pymetis (2023.1.1 via Conda-Forge): Graph partitioning.
+kahypar (1.3.5 via PyPI): Hypergraph partitioning.
+See requirements.txt for version details if using the pip method.
+
+"""
