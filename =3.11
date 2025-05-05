@@ -1,0 +1,5 @@
+Collecting ply
+  Downloading ply-3.11-py2.py3-none-any.whl.metadata (844 bytes)
+Downloading ply-3.11-py2.py3-none-any.whl (49 kB)
+Installing collected packages: ply
+Successfully installed ply-3.11

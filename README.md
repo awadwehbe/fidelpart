@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Berkeley Quantum Synthesis Toolkit (BQSKit)
 
 The Berkeley Quantum Synthesis Toolkit (BQSKit) \[bis • kit\] is a powerful
@@ -168,3 +169,7 @@ kahypar (1.3.5 via PyPI): Hypergraph partitioning.
 See requirements.txt for version details if using the pip method.
 
 """
+=======
+# bqskit_withHyper
+bqskit with new algorithm integrated(hyperGraph partitioning)
+>>>>>>> 9f0473543b8ce68fe893bdf0597f130fe4685e2c

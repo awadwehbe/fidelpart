@@ -1,0 +1,7 @@
+* text=auto
+*.txt text
+*.cc text
+*.h text
+*.py text
+*.nets text
+*.hgr text
