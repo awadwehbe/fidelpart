@@ -1,10 +1,36 @@
-venv/
-env/
-build/
-*.egg-info/
+# Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.egg-info/
+
+# Virtual Environments
+venv/
+env/
+
+# Build artifacts
+build/
+dist/
+
+# Editor files
 *.swp
 *.swo
+
+# --- Recommended Additions ---
+
+# VS Code editor settings
+.vscode/
+
+# C++ Build Artifacts for dependencies
+mt-kahypar/build/
+kahypar/build/
+
+# Compressed archives
+*.rar
+*.zip
+*.7z
+
+# Temporary files from partitioning
+*.hgr
+*.hgr.part*

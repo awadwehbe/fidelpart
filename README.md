@@ -1,175 +1,122 @@
-<<<<<<< HEAD
-# Berkeley Quantum Synthesis Toolkit (BQSKit)
+Of course. Here is a single, complete `README.md` file formatted in Markdown. You can copy and paste this entire block of text directly into the `README.md` file in the root of your `C:\bqskit` directory for your GitHub repository.
 
-The Berkeley Quantum Synthesis Toolkit (BQSKit) \[bis • kit\] is a powerful
-and portable quantum compiler framework. It can be used with ease to compile
-quantum programs to efficient physical circuits for any QPU.
+-----
 
-## Installation
+````markdown
+# Fidelipart: A Fidelity-Aware Hypergraph Partitioning Framework for BQSKit
 
-BQSKit is available for Python 3.8+ on Linux, macOS, and Windows. BQSKit
-and its dependencies are listed on the [Python Package Index](https://pypi.org),
-and as such, pip can easily install it:
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-```sh
-pip install bqskit
-```
+This repository contains the source code for **Fidelipart**, a novel, fidelity-aware partitioning pass integrated into the BQSKit framework, as presented in the paper "[Your Paper Title Here]".
 
-## Basic Usage
+This project is an extension of the official [Berkeley Quantum Synthesis Toolkit (BQSKit)](https://github.com/BQSKit/bqskit) and includes all of its original functionality, extended with our custom partitioning logic.
 
-A standard BQSKit workflow loads a program into the framework, models the
-target QPU, compiles the program, and exports the resulting circuit. The
-below example uses BQSKit to optimize an input circuit provided by a qasm
-file:
+## Description
 
-```python
-from bqskit import compile, Circuit
+Effective circuit partitioning is critical for Noisy Intermediate-Scale Quantum (NISQ) devices, which are hampered by high error rates and limited qubit connectivity. Standard partitioning heuristics often neglect gate-specific error impacts, leading to suboptimal divisions with significant communication overhead and reduced fidelity. Fidelipart addresses this by transforming quantum circuits into a fidelity-aware hypergraph. In this model, gate error rates and structural dependencies inform the weights of nodes (gates) and hyperedges (representing multi-qubit interactions and qubit timelines), guiding the Mt-KaHyPar partitioner to minimize cuts through error-prone operations and preserve circuit integrity.
 
-# Load a circuit from QASM
-circuit = Circuit.from_file("input.qasm")
+## Key Features
 
-# Compile the circuit
-compiled_circuit = compile(circuit)
+- **Fidelity-Aware Hypergraph Model:** Converts quantum circuits into a weighted hypergraph where weights are derived from gate error rates and structural properties.
+- **Advanced Partitioning:** Leverages the state-of-the-art Mt-KaHyPar solver to partition the hypergraph, optimizing for minimal inter-partition connectivity using the `km1` metric.
+- **Optional Partition Merging:** Includes a heuristic-based merging stage to further reduce cut qubits by combining partitions that share a significant number of global qubits.
+- **Dependency Analysis:** Constructs a dependency graph between the final partitions to define a valid execution order based on shared qubits.
+- **Local Contiguous Re-mapping:** Standardizes subcircuits by trimming unused qubits and remapping active global qubits to compact, local indices for efficient execution and analysis.
 
-# Save output as QASM
-compiled_circuit.save("output.qasm")
-```
+## Prerequisites
 
-To learn more about BQSKit, follow the
-[tutorial series](https://github.com/BQSKit/bqskit-tutorial/) or refer to
-the [documentation](https://bqskit.readthedocs.io/en/latest/).
-
-## How to Cite
-
-You can use the [software disclosure](https://www.osti.gov/biblio/1785933)
-to cite the BQSKit package.
-
-Additionally, if you used or extended a specific algorithm, you should cite
-that individually. BQSKit passes will include a relevant reference in
-their documentation.
-
-## License
-
-The software in this repository is licensed under a **BSD free software
-license** and can be used in source or binary form for any purpose as long
-as the simple licensing requirements are followed. See the
-**[LICENSE](https://github.com/BQSKit/bqskit/blob/master/LICENSE)** file
-for more information.
-
-## Copyright
-
-Berkeley Quantum Synthesis Toolkit (BQSKit) Copyright (c) 2021,
-The Regents of the University of California, through Lawrence
-Berkeley National Laboratory (subject to receipt of any required
-approvals from the U.S. Dept. of Energy) and Massachusetts
-Institute of Technology (MIT).  All rights reserved.
-
-If you have questions about your rights to use or distribute this software,
-please contact Berkeley Lab's Intellectual Property Office at IPO@lbl.gov.
-
-NOTICE.  This Software was developed under funding from the U.S. Department
-of Energy and the U.S. Government consequently retains certain rights.  As
-such, the U.S. Government has been granted for itself and others acting on
-its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the
-Software to reproduce, distribute copies to the public, prepare derivative
-works, and perform publicly and display publicly, and to permit others to
-do so.
-
-
-"""
-
-
-"""
+- A Unix-like environment (e.g., Linux, or WSL on Windows for compiling Mt-KaHyPar)
+- [Conda](https://docs.conda.io/en/latest/miniconda.html) for environment management
+- A modern C++ compiler (e.g., GCC/g++ or Clang) required for building Mt-KaHyPar.
 
 ## Installation and Setup
 
-To use BQSKIT with its dependencies, including `pymetis` for graph partitioning and `kahypar` for hypergraph partitioning, follow these steps to set up the environment. These instructions assume you have a compatible system (Linux, macOS, or Windows with WSL).
+Follow these steps to set up the project and run the experiments.
 
-### Prerequisites
-- **Miniconda**: Install Miniconda to manage the Python environment. Download it from [https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html) and follow the installation instructions for your platform.
-- **Git**: Required to clone or work with the repository (if applicable).
+**Step 1: Clone this Repository**
 
-### Setting Up the Environment
-The recommended way to install dependencies is using Conda with the provided `environment.yml` file, which ensures compatibility with `pymetis` (installed via Conda-Forge) and `kahypar` (installed via PyPI).
-
-#### Step 1: Clone or Extract the Project
-If you received this as a Git repository:
 ```bash
-git clone <repository-url>
-cd bqskit
+git clone [https://github.com/your-username/your-repo-name.git](https://github.com/your-username/your-repo-name.git)
+cd your-repo-name
+````
 
-#### Step 2: Create the Environment
-#Use the environment.yml file to recreate the exact environment:
-conda env create -f environment.yml
+**Step 2: Compile and Install Mt-KaHyPar (External Dependency)**
 
-"""
-This sets up a Conda environment named pymetis_env with Python 3.11 and all required packages.
+Fidelipart relies on the Mt-KaHyPar partitioner, which must be compiled from source.
 
-The contents of environment.yml are:
-"""
-name: pymetis_env
-channels:
-  - conda-forge
-  - defaults
-dependencies:
-  - python=3.11
-  - numpy>=1.26.0
-  - scipy>=1.12.0
-  - lark>=1.2.2
-  - pymetis>=2022.1
-  - pip
-  - pip:
-    - kahypar>=1.0
-    - bqskitrs>=0.4.1
-    - dill>=0.3.9
-    - typing_extensions>=4.12.2
+1.  Clone the official Mt-KaHyPar repository:
+    ```bash
+    git clone [https://github.com/kahypar/mt-kahypar.git](https://github.com/kahypar/mt-kahypar.git)
+    cd mt-kahypar
+    ```
+2.  Follow their official compilation instructions to build the project. A typical workflow is:
+    ```bash
+    mkdir build
+    cd build
+    cmake ..
+    make
+    ```
+3.  **IMPORTANT:** After successful compilation, you must either:
+      * **Option A (Recommended):** Add the directory containing the `mtkahypar` executable (typically `.../mt-kahypar/build/mt-kahypar/application/`) to your system's `PATH` environment variable.
+      * **Option B (Alternative):** Manually edit the path in our script. In `bqskit/passes/partitioning/hypergraph.py`, find the `mtkahypar_bin` variable and replace the default value with the full, absolute path to your compiled executable.
 
-### Step 3: Activate the Environment
-#Activate the environment to use it:
-conda activate pymetis_env
+**Step 3: Create and Activate Conda Environment**
 
-### Step 4: Install BQSKIT
-# Install the local bqskit package in editable mode:
+The provided `environment.yml` file contains all necessary Python packages (including the specific version of BQSKit this fork is based on, Cirq, NetworkX, etc.).
+
+1.  Navigate back to the root directory of this project (`your-repo-name`).
+2.  Create the Conda environment from the file:
+    ```bash
+    conda env create -f environment.yml
+    ```
+3.  Activate the new environment:
+    ```bash
+    conda activate QB
+    ```
+
+**Step 4: Install This Modified BQSKit**
+
+To ensure your Python environment uses the `Fidelipart` code included in this repository, install this modified version of BQSKit in "editable" mode. This links the installation to this source folder.
+
+```bash
 pip install -e .
+```
 
-###Step 5: Verify Installation
-#Test that everything is set up:
+The setup is now complete. Your `QB` conda environment is active and configured to use the `Fidelipart` code from this directory.
 
-python -c "import bqskit, pymetis, kahypar; print('BQSKIT and dependencies installed successfully')"
+## How to Run Experiments
 
-"""
-Alternative Setup with pip
-If you prefer not to use Conda or encounter issues:
+The primary script for reproducing the results in our paper is located at `bqskit/passes/partitioning/compare_partitioning.py`.
 
-Create a virtual environment
+To run the full comparison on all benchmark circuits, execute the following command from the root directory of the project:
 
-"""
-python -m venv venv
-source venv/bin/activate  # Linux/WSL/Mac
-venv\Scripts\activate     # Windows CMD
+```bash
+python bqskit/passes/partitioning/compare_partitioning.py
+```
 
-#Install dependencies from requirements.txt:
-pip install -r requirements.txt
+## How to Cite
 
-#Install BQSKIT:Install BQSKIT:
-pip install .
+If you use Fidelipart in your research, please cite our paper:
 
-#Note: pymetis may require a compatible Python version (e.g., <=3.11) and a C++ compiler (e.g., g++). On Ubuntu, install build tools with:
-sudo apt update && sudo apt install -y build-essential g++ cmake
+```bibtex
+@article{your_bibtex_key_here,
+  author    = {Your Name(s)},
+  title     = {Fidelipart: Fidelity-Aware Hypergraph Partitioning for Enhanced Quantum Circuit Execution on NISQ Devices},
+  journal   = {Journal Name or arXiv},
+  year      = {2025},
+  volume    = {X},
+  pages     = {Y--Z},
+  doi       = {DOI goes here}
+}
+```
 
-"""
+## License
 
-This method might not match the exact Conda-Forge pymetis version (2023.1.1) used in development.
+This project is licensed under the MIT License. See the [LICENSE](https://www.google.com/search?q=LICENSE) file for details.
 
-Dependencies
-Core BQSKIT Dependencies: numpy, scipy, lark, bqskitrs, dill, typing_extensions.
-Partitioning Tools:
-pymetis (2023.1.1 via Conda-Forge): Graph partitioning.
-kahypar (1.3.5 via PyPI): Hypergraph partitioning.
-See requirements.txt for version details if using the pip method.
+## Acknowledgements
 
-"""
-=======
-# bqskit_withHyper
-bqskit with new algorithm integrated(hyperGraph partitioning)
->>>>>>> 9f0473543b8ce68fe893bdf0597f130fe4685e2c
+This work builds upon the excellent open-source [BQSKit](https://github.com/BQSKit/bqskit) framework from Lawrence Berkeley National Laboratory and utilizes the powerful [Mt-KaHyPar](https://github.com/kahypar/mt-kahypar) hypergraph partitioner. We thank their respective development teams for making these tools available.
+
+```
+```
