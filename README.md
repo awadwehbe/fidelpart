@@ -1,4 +1,3 @@
-Of course. Here is a single, complete `README.md` file formatted in Markdown. You can copy and paste this entire block of text directly into the `README.md` file in the root of your `C:\bqskit` directory for your GitHub repository.
 
 -----
 
@@ -94,21 +93,7 @@ To run the full comparison on all benchmark circuits, execute the following comm
 python bqskit/passes/partitioning/compare_partitioning.py
 ```
 
-## How to Cite
 
-If you use Fidelipart in your research, please cite our paper:
-
-```bibtex
-@article{your_bibtex_key_here,
-  author    = {Your Name(s)},
-  title     = {Fidelipart: Fidelity-Aware Hypergraph Partitioning for Enhanced Quantum Circuit Execution on NISQ Devices},
-  journal   = {Journal Name or arXiv},
-  year      = {2025},
-  volume    = {X},
-  pages     = {Y--Z},
-  doi       = {DOI goes here}
-}
-```
 
 ## License
 
